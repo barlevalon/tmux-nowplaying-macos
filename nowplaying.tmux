@@ -43,18 +43,7 @@ if [[ "$status_left_value" == *"#{nowplaying}"* ]] && [[ "$status_left_value" !=
     tmux set-option -g status-left "$new_status_left"
 fi
 
-# Set up automatic interval adjustment if enabled
-if [[ "$(get_tmux_option "@nowplaying_auto_interval" "no")" == "yes" ]]; then
-    # Check if music is playing and if text needs scrolling
-    output="$("$CURRENT_DIR/scripts/nowplaying_mediaremote.swift" 2>/dev/null)"
-    if [ -n "$output" ]; then
-        output_length="${#output}"
-        threshold="$(get_tmux_option "@nowplaying_scrollable_threshold" "30")"
-        
-        if [ "$output_length" -gt "$threshold" ]; then
-            # Set faster interval for scrolling
-            interval="$(get_tmux_option "@nowplaying_playing_interval" "1")"
-            tmux set-option -g status-interval "$interval"
-        fi
+# The interval management is now handled entirely in nowplaying.sh
+# This ensures we properly track and restore the user's original interval
     fi
 fi
